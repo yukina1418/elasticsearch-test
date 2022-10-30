@@ -3,8 +3,6 @@ version: '3.7'
 services:
   elasticsearch:
     image: elasticsearch:7.17.0
-    depends_on:
-      - database
     environment:
        discovery.type: single-node
     ports:
