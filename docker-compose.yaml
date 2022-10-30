@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  elasticsearch:
+    image: elasticsearch:7.17.0
+    depends_on:
+      - database
+    environment:
+       discovery.type: single-node
+    ports:
+      - 9200:9200
+    volumes:
+      - ./jvm.options:/usr/share/elasticsearch/config/jvm.options
