@@ -1,7 +1,7 @@
-version: '3.7'
+version: '3.3'
 
 services:
-  elasticsearch:
+  data:
     image: elasticsearch:7.17.0
     environment:
        discovery.type: single-node
@@ -9,3 +9,11 @@ services:
       - 9200:9200
     volumes:
       - ./jvm.options:/usr/share/elasticsearch/config/jvm.options
+
+  kibana:
+    image: kibana:7.17.0
+    environment:
+      ELASTICSEARCH_UTL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - 5601:5601
