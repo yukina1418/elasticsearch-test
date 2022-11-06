@@ -3,12 +3,22 @@ version: '3.3'
 services:
   data:
     image: elasticsearch:7.17.0
+    container_name: elasticsearch
     environment:
-       discovery.type: single-node
+      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - bootstrap.memory_lock=true
     ports:
       - 9200:9200
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
-      - ./jvm.options:/usr/share/elasticsearch/config/jvm.options
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - elastic
 
   kibana:
     image: kibana:7.17.0
@@ -17,3 +27,13 @@ services:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     ports:
       - 5601:5601
+    networks:
+      - elastic
+
+volumes:
+  elasticsearch-data:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge
